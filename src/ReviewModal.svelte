@@ -1,6 +1,7 @@
-<script>
-  export let selectedPlace = '';
-  let review = '';
+<script lang="ts">
+  export let selectedPlace: string = '';
+  export let onClose: () => void = () => {};
+  let review: string = '';
 
   function submitReview() {
     const stored = JSON.parse(localStorage.getItem('reviews') || '{}');
@@ -9,55 +10,46 @@
     localStorage.setItem('reviews', JSON.stringify(stored));
     review = '';
     alert('レビューを投稿しました！');
+    onClose();
   }
-
-  $: existingReviews = JSON.parse(localStorage.getItem('reviews') || '{}')[selectedPlace] || [];
 </script>
 
-<div class="review-panel">
-  <h3>{selectedPlace} へのレビュー</h3>
-
-  {#if existingReviews.length > 0}
-    <ul class="review-list">
-      {#each existingReviews as r}
-        <li>{r}</li>
-      {/each}
-    </ul>
-  {:else}
-    <p class="no-review">まだレビューはありません。</p>
-  {/if}
-
-  <textarea bind:value={review} rows="4" placeholder="レビューを入力してください"></textarea><br />
-  <button on:click={submitReview}>投稿</button>
+<div class="modal-overlay" on:click={onClose}>
+  <div class="modal" on:click|stopPropagation>
+    <h3 class="storename">{selectedPlace} へのレビュー</h3>
+    <textarea
+      bind:value={review}
+      rows="4"
+      cols="40"
+      placeholder="レビューを入力してください"
+    ></textarea>
+    <br />
+    <button on:click={submitReview}>投稿</button>
+    <button on:click={onClose}>閉じる</button>
+  </div>
 </div>
 
 <style>
-  .review-panel {
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  .modal {
+    background: white;
     padding: 1rem;
-    background: #f9f9f9;
-    height: 100%;
-    overflow-y: auto;
-    box-shadow: -1px 0 5px rgba(0,0,0,0.1);
-  }
-
-  h3 {
-    margin-top: 0;
-    color: #333;
-  }
-
-  .review-list {
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .review-list li {
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
-  }
-
-  .no-review {
-    color: #666;
-    font-style: italic;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   textarea {
@@ -68,16 +60,32 @@
   }
 
   button {
+    margin-right: 0.5rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    background: #007bff;
-    color: white;
+    cursor: pointer;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
   }
 
-  button:hover {
-    background: #0056b3;
+  button:first-of-type {
+    background-color: #007bff;
+    color: white;
+  }
+
+  button:first-of-type:hover {
+    background-color: #0056b3;
+  }
+
+  button:last-of-type {
+    background-color: #ccc;
+  }
+
+  button:last-of-type:hover {
+    background-color: #999;
+  }
+
+  .storename{
+    color: #0056b3;
   }
 </style>

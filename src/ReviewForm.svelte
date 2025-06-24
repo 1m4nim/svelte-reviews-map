@@ -17,7 +17,7 @@
 
 <div class="modal-overlay" on:click={onClose}>
   <div class="modal" on:click|stopPropagation>
-    <h3>{selectedPlace} へのレビュー</h3>
+    <h3 class="storename">{selectedPlace} へのレビュー</h3>
     <textarea bind:value={review} rows="4" cols="40" placeholder="レビューを入力してください"></textarea><br />
     <button on:click={submitReview}>投稿</button>
     <button on:click={onClose}>閉じる</button>
@@ -78,5 +78,10 @@
 
   button:last-of-type:hover {
     background-color: #999;
+  }
+
+  .storename{
+    color: black;
+    background-color: bisque;
   }
 </style>

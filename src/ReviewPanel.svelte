@@ -12,6 +12,13 @@
   }
 </script>
 
-<h3>{selectedPlace} へのレビュー</h3>
+<h3 class="storename">{selectedPlace} へのレビュー</h3>
 <textarea bind:value={review} rows="4" cols="40" placeholder="レビューを入力してください"></textarea><br />
 <button on:click={submitReview}>投稿</button>
+ 
+<style>
+  .storename{
+    background-color: bisque;
+    color:black;
+  }
+</style>

@@ -1,48 +1,33 @@
-# Svelte + Vite
+# 2025/06/23
 
-This template should help get you started developing with Svelte in Vite.
+## 概要
+- LeafletとSvelteを使った地図検索＆レビュー投稿アプリを作成
+- OpenStreetMapのNominatim APIを利用した場所検索機能を実装
+- 検索結果を地図上に最大30件のマーカーで表示
+- マーカーをクリックするとレビュー投稿フォームをモーダルまたは横並びパネルで表示
+- PC版は地図とレビューを横並び表示、スマホ版はモーダルでレビュー投稿可能に対応
+- レビューはLocalStorageに保存し、永続化を実現
 
-## Recommended IDE Setup
+### 使い方
+- 検索のフォームに場所を入れることで東京都の30件のものがヒットするようにした
+- PCだと、マーカーを押すと左に地図・右にレビューをかけるようになります
+- スマホだと、マーカーを押すとモーダルでレビューがかけるようになります
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## 詳細
 
-## Need an official Svelte framework?
+### 地図・検索機能
+- Leafletで地図を表示し、OpenStreetMapのタイルを使用
+- Nominatim APIにキーワードを送り、最大30件の検索結果を取得
+- 検索結果ごとにマーカーを設置し、ポップアップ内にレビュー投稿ボタンを表示
+- マーカークリック時にレビュー投稿フォームを呼び出すイベントを実装
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+### レビュー機能
+- レビュー投稿フォームを`ReviewModal.svelte`（モーダル）と`ReviewPanel.svelte`（横並びパネル）で実装
+- `App.svelte`で画面サイズを監視し、PCは横並び、スマホはモーダル表示に切り替え
+- レビューはローカルストレージに保存し、ページをリロードしても内容が保持される
 
-## Technical considerations
+### UI/UX改善
+- 画面幅によるレスポンシブ対応を実装
+- PCでは地図を横幅いっぱいに広げ、レビューエリアは横にスリムに表示
+- モーダルのクリックで閉じる仕組みを実装
 
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `checkJs` in the JS template?**
-
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
-# svelte-reviews-map
